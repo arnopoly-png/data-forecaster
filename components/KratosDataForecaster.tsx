@@ -113,8 +113,10 @@ export default function KratosDataForecaster() {
 
   return (
     <div className="p-6 md:p-10 space-y-8 max-w-7xl mx-auto">
-      <header className="flex items-center justify-between">
-        <h1 className="text-3xl md:text-4xl font-bold tracking-tight">Kratos Data Forecaster</h1>
+      <header className="flex items-center justify-between border-b border-border/60 pb-4">
+        <h1 className="text-3xl md:text-4xl font-bold tracking-tight bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+          Kratos Data Forecaster
+        </h1>
         <div className="flex gap-2">
           <Button variant="outline" onClick={resetAll}>Reset</Button>
           <Button>Recalculate</Button>
@@ -122,7 +124,7 @@ export default function KratosDataForecaster() {
       </header>
 
       {/* Top KPIs */}
-      <div className="grid md:grid-cols-4 gap-4">
+      <div className="grid md:grid-cols-4 gap-5">
         <Kpi title="Revenue" value={money(m.revenue)} sub={fmt(m.deals) + " deals"} />
         <Kpi title="New Cash Collected" value={money(m.newCash)} sub={"Cash rate " + pct(cashCollectedRate)} />
         <Kpi title="ROAS (Revenue)" value={fmt(m.roasRevenue) + "x"} sub={"Spend " + money(adSpend)} />
@@ -138,7 +140,7 @@ export default function KratosDataForecaster() {
 
         {/* Ads Level */}
         <Section title="Ads Level">
-          <NumberField label="Ads spent" prefix="$" value={adSpend} onChange={setAdSpend} step={100} />
+          <NumberField label="Ad spend" prefix="$" value={adSpend} onChange={setAdSpend} step={100} />
           <NumberField label="Cost per click (CPC)" prefix="$" value={cpc} onChange={setCpc} step={0.1} />
           <PercentSlider label="CTR" value={ctr} onChange={setCtr} step={0.001} max={0.2} />
           <div className="grid grid-cols-2 gap-3 pt-3">
@@ -213,9 +215,9 @@ export default function KratosDataForecaster() {
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <Card className="shadow-sm">
+    <Card className="shadow-sm ring-1 ring-border/40">
       <CardContent className="p-5 space-y-4">
-        <div className="font-semibold text-lg">{title}</div>
+        <div className="font-semibold text-lg text-foreground">{title}</div>
         {children}
       </CardContent>
     </Card>
@@ -224,10 +226,10 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 function Kpi({ title, value, sub }: { title: string; value: string; sub?: string }) {
   return (
-    <Card className="shadow-sm">
+    <Card className="shadow-sm ring-1 ring-border/50 hover:bg-accent transition-colors">
       <CardContent className="p-4">
         <div className="text-sm text-muted-foreground">{title}</div>
-        <div className="text-2xl font-bold leading-tight">{value}</div>
+        <div className="text-2xl font-bold leading-tight text-foreground">{value}</div>
         {sub && <div className="text-xs text-muted-foreground mt-1">{sub}</div>}
       </CardContent>
     </Card>
@@ -236,9 +238,9 @@ function Kpi({ title, value, sub }: { title: string; value: string; sub?: string
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="p-3 rounded-xl border bg-background">
+    <div className="p-3 rounded-xl border border-border bg-muted/30">
       <div className="text-xs text-muted-foreground">{label}</div>
-      <div className="text-base font-medium">{value}</div>
+      <div className="text-base font-medium text-foreground">{value}</div>
     </div>
   );
 }

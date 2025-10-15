@@ -22,10 +22,10 @@ max={max}
 step={step}
 value={Number.isFinite(v) ? v : 0}
 onChange={(e) => onValueChange?.([parseFloat(e.target.value)])}
-className="w-full h-2 appearance-none rounded-full bg-neutral-200"
-style={{ accentColor: "black" }}
+className="w-full h-2 appearance-none rounded-full bg-muted"
+style={{ accentColor: "var(--primary)" }}
 />
-<div className="flex justify-between text-xs text-neutral-500 mt-1">
+<div className="flex justify-between text-xs text-muted-foreground mt-1">
 <span>{min}</span>
 <span>{max}</span>
 </div>
