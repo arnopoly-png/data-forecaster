@@ -1,10 +1,12 @@
+// Place this file at: data-forecaster/components/KratosDataForecaster.tsx
+// No external icon deps. Imports use relative paths inside data-forecaster.
+
 import React, { useMemo, useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Slider } from "@/components/ui/slider";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { TrendingUp, Calculator, RefreshCw } from "lucide-react";
+import { Card, CardContent } from "./ui/card";
+import { Button } from "./ui/button";
+import { Slider } from "./ui/slider";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
 
 // ---------- Helpers ----------
 function pct(v: number) { return (v * 100).toFixed(1) + "%" }
@@ -111,8 +113,8 @@ export default function KratosDataForecaster() {
       <header className="flex items-center justify-between">
         <h1 className="text-3xl md:text-4xl font-bold tracking-tight">Kratos Data Forecaster</h1>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={resetAll}><RefreshCw className="h-4 w-4 mr-2"/>Reset</Button>
-          <Button><Calculator className="h-4 w-4 mr-2"/>Recalculate</Button>
+          <Button variant="outline" onClick={resetAll}>Reset</Button>
+          <Button>Recalculate</Button>
         </div>
       </header>
 
@@ -188,8 +190,7 @@ export default function KratosDataForecaster() {
             </div>
             <Slider value={[rateBoost]} min={-0.5} max={0.5} step={0.01} onValueChange={(v)=>setRateBoost(v[0])} />
             <div className="text-sm text-muted-foreground">Current boost: <span className="font-medium">{pct(rateBoost)}</span></div>
-            <div className="rounded-xl border p-3 bg-muted/40 flex items-start gap-3">
-              <TrendingUp className="h-5 w-5"/>
+            <div className="rounded-xl border p-3 bg-muted/40">
               <p className="text-sm leading-relaxed">Glissez pour voir l'impact d'une amélioration ou détérioration globale de vos taux (opt-in, booking, show, close). Tous les KPIs se recalculent instantanément.</p>
             </div>
           </div>
@@ -238,4 +239,3 @@ function Stat({ label, value }: { label: string; value: string }) {
     </div>
   );
 }
-
