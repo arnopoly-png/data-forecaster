@@ -119,7 +119,6 @@ export default function KratosDataForecaster() {
         </h1>
         <div className="flex gap-2">
           <Button variant="outline" onClick={resetAll}>Reset</Button>
-          <Button>Recalculate</Button>
         </div>
       </header>
 
@@ -202,13 +201,7 @@ export default function KratosDataForecaster() {
         </Section>
       </div>
 
-      {/* Notes */}
-      <Card className="border-dashed">
-        <CardContent className="p-5 text-sm text-muted-foreground space-y-2">
-          <p><span className="font-semibold">Hypothèses MVP :</span> Clicks = Ads spent / CPC. Leads = Clicks × Opt-in. Booked = Leads × Booking. Shows = Booked × Show. Deals = Shows × Close. Revenue = Deals × Offer price. New Cash = Revenue × Cash collected rate.</p>
-          <p>Vous pouvez adapter les champs et les plages des sliders selon votre business (ex: devises CAD, plages CTR plus élevées pour UGC, etc.).</p>
-        </CardContent>
-      </Card>
+      
     </div>
   );
 }

@@ -13,10 +13,10 @@
   --muted-foreground: #94a3b8;     /* secondary text */
   --border: #233042;               /* borders & dividers */
 
-  /* Brand */
-  --primary: #8b5cf6;              /* violet-500 */
+  /* Brand - shifted to pale blue */
+  --primary: #93c5fd;              /* blue-300 (pale blue) */
   --primary-foreground: #0b0f14;   /* readable on primary */
-  --accent: #1b2432;               /* elevated hover */
+  --accent: #0f223a;               /* dark blue hover */
   --accent-foreground: var(--foreground);
 }
 
