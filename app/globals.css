@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* Force dark mode by default with comprehensive tokens */
+/* Theme tokens (dark by default). Light theme overrides are below. */
 :root {
   /* Base */
   --background: #0b0f14;           /* page background */
@@ -37,12 +37,24 @@
   --font-mono: var(--font-geist-mono);
 }
 
-/* Keep dark regardless of system preference */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0b0f14;
-    --foreground: #e6e8eb;
-  }
+/* Light theme overrides */
+[data-theme="light"] {
+  /* Base */
+  --background: #f8fafc;           /* slate-50 */
+  --foreground: #0b1220;           /* near-black text */
+
+  /* Surfaces */
+  --card: #ffffff;
+  --card-foreground: var(--foreground);
+  --muted: #f1f5f9;                /* slate-100 */
+  --muted-foreground: #475569;     /* slate-600 */
+  --border: #e2e8f0;               /* slate-200 */
+
+  /* Brand */
+  --primary: #2563eb;              /* blue-600 */
+  --primary-foreground: #ffffff;   /* readable on primary */
+  --accent: #eaf2ff;               /* pale blue hover */
+  --accent-foreground: var(--foreground);
 }
 
 body {

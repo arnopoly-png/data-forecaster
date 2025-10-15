@@ -3,7 +3,7 @@
 
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Card, CardContent } from "./ui/card";
 import { Button } from "./ui/button";
 import { Slider } from "./ui/slider";
@@ -51,20 +51,32 @@ function NumberField({ label, value, onChange, prefix, suffix, step=1, min=0 }: 
 }
 
 export default function KratosDataForecaster() {
+  // ---------- Theme handling ----------
+  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
+    if (typeof window === 'undefined') return 'dark';
+    return (localStorage.getItem('theme') as 'dark' | 'light') || 'dark';
+  });
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      document.documentElement.setAttribute('data-theme', theme);
+      try { localStorage.setItem('theme', theme); } catch {}
+    }
+  }, [theme]);
+
   // ---------- Base Inputs (Monthly) ----------
-  const [offerPrice, setOfferPrice] = useState(7000);
+  const [offerPrice, setOfferPrice] = useState(0);
 
   // Ads
-  const [adSpend, setAdSpend] = useState(10000);
-  const [cpc, setCpc] = useState(2.5);
-  const [ctr, setCtr] = useState(0.015); // 1.5%
+  const [adSpend, setAdSpend] = useState(0);
+  const [cpc, setCpc] = useState(0);
+  const [ctr, setCtr] = useState(0); // 1.5%
 
   // Funnel Rates
-  const [optInRate, setOptInRate] = useState(0.35); // leads / clicks
-  const [bookingRate, setBookingRate] = useState(0.20); // booked / leads
-  const [showRate, setShowRate] = useState(0.70); // show / booked
-  const [closeRate, setCloseRate] = useState(0.25); // deals / show
-  const [cashCollectedRate, setCashCollectedRate] = useState(0.60); // portion of revenue collected now
+  const [optInRate, setOptInRate] = useState(0); // leads / clicks
+  const [bookingRate, setBookingRate] = useState(0); // booked / leads
+  const [showRate, setShowRate] = useState(0); // show / booked
+  const [closeRate, setCloseRate] = useState(0); // deals / show
+  const [cashCollectedRate, setCashCollectedRate] = useState(0); // portion of revenue collected now
 
   // Scenario tweaks (% delta multiplier for rates)
   const [rateBoost, setRateBoost] = useState(0); // -50% to +50%
@@ -105,10 +117,10 @@ export default function KratosDataForecaster() {
   }, [adSpend, cpc, ctr, optInRate, bookingRate, showRate, closeRate, offerPrice, cashCollectedRate, rateBoost]);
 
   function resetAll() {
-    setOfferPrice(7000);
-    setAdSpend(10000); setCpc(2.5); setCtr(0.015);
-    setOptInRate(0.35); setBookingRate(0.20); setShowRate(0.70); setCloseRate(0.25);
-    setCashCollectedRate(0.60); setRateBoost(0);
+    setOfferPrice(0);
+    setAdSpend(0); setCpc(0); setCtr(0);
+    setOptInRate(0); setBookingRate(0); setShowRate(0); setCloseRate(0);
+    setCashCollectedRate(0); setRateBoost(0);
   }
 
   return (
@@ -118,6 +130,7 @@ export default function KratosDataForecaster() {
           Kratos Data Forecaster
         </h1>
         <div className="flex gap-2">
+          <ThemeToggleUI theme={theme} setTheme={setTheme} />
           <Button variant="outline" onClick={resetAll}>Reset</Button>
         </div>
       </header>
@@ -203,6 +216,17 @@ export default function KratosDataForecaster() {
 
       
     </div>
+  );
+}
+function ThemeToggleUI({ theme, setTheme }: { theme: 'dark' | 'light'; setTheme: (t:'dark'|'light')=>void }) {
+  return (
+    <Button
+      variant="outline"
+      onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+      title={theme === 'dark' ? 'Passer en thème clair' : 'Passer en thème sombre'}
+    >
+      {theme === 'dark' ? 'Light' : 'Dark'}
+    </Button>
   );
 }
 
