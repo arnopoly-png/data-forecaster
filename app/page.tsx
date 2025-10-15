@@ -1,4 +1,8 @@
-import KratosDataForecaster from "../data-forecaster/components/KratosDataForecaster";
+import dynamic from "next/dynamic";
+const KratosDataForecaster = dynamic(
+  () => import("../../data-forecaster/components/KratosDataForecaster"),
+  { ssr: false }
+);
 
 export default function Page() {
   return (
