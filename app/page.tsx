@@ -1,5 +1,4 @@
-
-import KratosDataForecaster from "@/components/KratosDataForecaster";
+import KratosDataForecaster from "../../data-forecaster/components/KratosDataForecaster";
 
 export default function Page() {
   return (
