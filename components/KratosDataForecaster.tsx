@@ -1,7 +1,7 @@
 // Place this file at: data-forecaster/components/KratosDataForecaster.tsx
 // No external icon deps. Imports use relative paths inside data-forecaster.
 
-import React, { useClient } from "react";
+import React, { "use client"; } from "react";
 import { Card, CardContent } from "./ui/card";
 import { Button } from "./ui/button";
 import { Slider } from "./ui/slider";
