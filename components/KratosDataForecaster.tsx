@@ -1,12 +1,15 @@
 // Place this file at: data-forecaster/components/KratosDataForecaster.tsx
 // No external icon deps. Imports use relative paths inside data-forecaster.
 
-import React, { "use client"; } from "react";
+"use client";
+
+import React, { useMemo, useState } from "react";
 import { Card, CardContent } from "./ui/card";
 import { Button } from "./ui/button";
 import { Slider } from "./ui/slider";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
+
 
 // ---------- Helpers ----------
 function pct(v: number) { return (v * 100).toFixed(1) + "%" }
