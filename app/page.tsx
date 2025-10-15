@@ -1,7 +1,7 @@
 import dynamic from "next/dynamic";
 
 const KratosDataForecaster = dynamic(
-  () => import("../../data-forecaster/components/KratosDataForecaster"),
+  () => import("../data-forecaster/components/KratosDataForecaster"),
   { ssr: false }
 );
 
