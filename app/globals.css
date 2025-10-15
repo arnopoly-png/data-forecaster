@@ -1,26 +1,53 @@
 @import "tailwindcss";
 
+/* Force dark mode by default with comprehensive tokens */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Base */
+  --background: #0b0f14;           /* page background */
+  --foreground: #e6e8eb;           /* primary text */
+
+  /* Surfaces */
+  --card: #10161f;                 /* cards and panels */
+  --card-foreground: var(--foreground);
+  --muted: #0f141b;                /* subtle backgrounds, hovers */
+  --muted-foreground: #94a3b8;     /* secondary text */
+  --border: #233042;               /* borders & dividers */
+
+  /* Brand */
+  --primary: #8b5cf6;              /* violet-500 */
+  --primary-foreground: #0b0f14;   /* readable on primary */
+  --accent: #1b2432;               /* elevated hover */
+  --accent-foreground: var(--foreground);
 }
 
+/* Map tokens to Tailwind color names */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
+/* Keep dark regardless of system preference */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #0b0f14;
+    --foreground: #e6e8eb;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, Segoe UI,
+    Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
 }
