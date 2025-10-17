@@ -50,6 +50,18 @@ function NumberField({ label, value, onChange, prefix, suffix, step=1, min=0 }: 
   );
 }
 
+function IntSlider({ label, value, onChange, step=1, min=1, max=60 }: { label: string; value: number; onChange: (v:number)=>void; step?: number; min?: number; max?: number; }) {
+  return (
+    <div className="space-y-2">
+      <div className="flex items-center justify-between">
+        <Label className="text-sm text-muted-foreground">{label}</Label>
+        <div className="font-medium">{value}</div>
+      </div>
+      <Slider value={[value]} step={step} min={min} max={max} onValueChange={(v)=>onChange(Math.round(v[0]))} />
+    </div>
+  );
+}
+
 export default function KratosDataForecaster() {
   // ---------- Theme handling ----------
   const [theme, setTheme] = useState<'dark' | 'light'>(() => {
@@ -80,6 +92,10 @@ export default function KratosDataForecaster() {
 
   // Scenario tweaks (% delta multiplier for rates)
   const [rateBoost, setRateBoost] = useState(0); // -50% to +50%
+
+  // Growth projection controls
+  const [monthlyAdIncrement, setMonthlyAdIncrement] = useState(0);
+  const [monthsToSimulate, setMonthsToSimulate] = useState(12);
 
   // ---------- Derived Metrics ----------
   const m = useMemo(() => {
@@ -115,6 +131,57 @@ export default function KratosDataForecaster() {
       optIn, bookR, showR, closeR,
     };
   }, [adSpend, cpc, ctr, optInRate, bookingRate, showRate, closeRate, offerPrice, cashCollectedRate, rateBoost]);
+
+  const monthlyProjections = useMemo(() => {
+    const months = Math.max(1, Math.floor(monthsToSimulate || 0));
+    const result: Array<{
+      month: number;
+      spend: number;
+      clicks: number;
+      leads: number;
+      booked: number;
+      shows: number;
+      deals: number;
+      revenue: number;
+      newCash: number;
+      roasRevenue: number;
+      roasNewCash: number;
+    }> = [];
+
+    const optIn = Math.max(0, optInRate * (1 + rateBoost));
+    const bookR = Math.max(0, bookingRate * (1 + rateBoost));
+    const showR = Math.max(0, showRate * (1 + rateBoost));
+    const closeR = Math.max(0, closeRate * (1 + rateBoost));
+
+    for (let i = 0; i < months; i++) {
+      const spend = adSpend + monthlyAdIncrement * i;
+      const clicks = spend > 0 && cpc > 0 ? spend / cpc : 0;
+      const leads = clicks * optIn;
+      const booked = leads * bookR;
+      const shows = booked * showR;
+      const deals = shows * closeR;
+      const revenue = deals * offerPrice;
+      const newCash = revenue * cashCollectedRate;
+      const roasRevenue = spend > 0 ? revenue / spend : 0;
+      const roasNewCash = spend > 0 ? newCash / spend : 0;
+
+      result.push({
+        month: i + 1,
+        spend,
+        clicks,
+        leads,
+        booked,
+        shows,
+        deals,
+        revenue,
+        newCash,
+        roasRevenue,
+        roasNewCash,
+      });
+    }
+
+    return result;
+  }, [adSpend, monthlyAdIncrement, monthsToSimulate, cpc, optInRate, bookingRate, showRate, closeRate, offerPrice, cashCollectedRate, rateBoost]);
 
   function resetAll() {
     setOfferPrice(0);
@@ -212,6 +279,51 @@ export default function KratosDataForecaster() {
             </div>
           </div>
         </Section>
+
+      {/* Monthly Growth Projection */}
+      <Section title="Projection mensuelle (croissance du spend)">
+        <div className="space-y-4">
+          <div className="grid md:grid-cols-3 gap-4">
+            <NumberField label="Augmentation mensuelle du spend" prefix="$" value={monthlyAdIncrement} onChange={setMonthlyAdIncrement} step={100} min={0} />
+            <IntSlider label="Nombre de mois" value={monthsToSimulate} onChange={setMonthsToSimulate} min={1} max={60} step={1} />
+          </div>
+
+          <div className="rounded-xl border overflow-x-auto">
+            <table className="min-w-[800px] w-full text-sm">
+              <thead>
+                <tr className="bg-muted/50 text-muted-foreground">
+                  <th className="text-left px-3 py-2">Mois</th>
+                  <th className="text-right px-3 py-2">Spend</th>
+                  <th className="text-right px-3 py-2">Clicks</th>
+                  <th className="text-right px-3 py-2">Leads</th>
+                  <th className="text-right px-3 py-2">Booked</th>
+                  <th className="text-right px-3 py-2">Shows</th>
+                  <th className="text-right px-3 py-2">Deals</th>
+                  <th className="text-right px-3 py-2">Revenue</th>
+                  <th className="text-right px-3 py-2">New Cash</th>
+                  <th className="text-right px-3 py-2">ROAS Rev</th>
+                </tr>
+              </thead>
+              <tbody>
+                {monthlyProjections.map(row => (
+                  <tr key={row.month} className="border-t">
+                    <td className="px-3 py-2">{row.month}</td>
+                    <td className="px-3 py-2 text-right">{money(row.spend)}</td>
+                    <td className="px-3 py-2 text-right">{fmt(row.clicks)}</td>
+                    <td className="px-3 py-2 text-right">{fmt(row.leads)}</td>
+                    <td className="px-3 py-2 text-right">{fmt(row.booked)}</td>
+                    <td className="px-3 py-2 text-right">{fmt(row.shows)}</td>
+                    <td className="px-3 py-2 text-right">{fmt(row.deals)}</td>
+                    <td className="px-3 py-2 text-right">{money(row.revenue)}</td>
+                    <td className="px-3 py-2 text-right">{money(row.newCash)}</td>
+                    <td className="px-3 py-2 text-right">{fmt(row.roasRevenue)}x</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </Section>
       </div>
 
       
